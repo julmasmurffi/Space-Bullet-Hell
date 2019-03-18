@@ -14,8 +14,18 @@ public class WaveConfig : ScriptableObject
 
 
     //getters for other classes
-    public GameObject GetEnemyPrefab(){ return enemyPrefab; }
-    public GameObject GetPathPrefab() { return pathPrefab; }
+    
+    public List<Transform> GetWaypoints()
+    {
+        var waveWaypoints = new List<Transform>();
+        foreach (Transform child in pathPrefab.transform)
+        {
+            waveWaypoints.Add(child);
+        }
+
+        return waveWaypoints;
+    }
+    public GameObject GetEnemyPrefab() { return enemyPrefab; }
 
     public float GetTimeBetweenSpawns() { return timeBetweenSpawns; }
     public float GetSpawnRandomizer() { return spawnRandomizer; }
