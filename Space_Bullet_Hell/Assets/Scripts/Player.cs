@@ -43,8 +43,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         MoveXY();
-        Fire();
-        
+        Fire(); 
     }
 
     private void Fire()
