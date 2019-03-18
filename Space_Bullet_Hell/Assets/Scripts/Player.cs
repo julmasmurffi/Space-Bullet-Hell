@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    
-
+    //config params
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float padding = 0.3f;
     [SerializeField] GameObject LaserPrefab;
     [SerializeField] float projectileSpeed = 10f;
+    [SerializeField] float projectileFiringPeriod = 1f;
+
+    Coroutine firingCoroutine;
 
     float xMin;
     float xMax;
@@ -42,16 +44,30 @@ public class Player : MonoBehaviour
     {
         MoveXY();
         Fire();
+        
     }
 
     private void Fire()
     {
         if (Input.GetButtonDown("Fire1"))
         {
+            firingCoroutine = StartCoroutine(Firing());
+        }
+        if (Input.GetButtonUp("Fire1"))
+        {
+            StopCoroutine(firingCoroutine);
+        }
+    }
+
+    IEnumerator Firing()
+    {
+        while (true)
+        {
             GameObject laser = Instantiate(LaserPrefab, transform.position, Quaternion.identity) as GameObject;
-            //TODO move laser
             //TODO make a sound
             laser.GetComponent<Rigidbody2D>().velocity = new Vector2(0, projectileSpeed);
+
+            yield return new WaitForSeconds(projectileFiringPeriod);
         }
     }
 
@@ -61,12 +77,9 @@ public class Player : MonoBehaviour
         var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
         var deltaY = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
         
-
         var newxPos = Mathf.Clamp(transform.position.x + deltaX, xMin, xMax);
         var newyPos = Mathf.Clamp(transform.position.y + deltaY, yMin, yMax);
         transform.position = new Vector2(newxPos, newyPos);
-
-        
     }
 
     
